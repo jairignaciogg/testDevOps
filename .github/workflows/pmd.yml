@@ -4,8 +4,8 @@ on:
   push:
     branches:
       - '*'
-    paths:
-      - '**.cls'
+    # paths:
+    #   - '**.cls'
 jobs:
   Explore-GitHub-Actions:
     runs-on: ubuntu-latest
