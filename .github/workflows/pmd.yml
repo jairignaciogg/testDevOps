@@ -23,4 +23,4 @@ jobs:
       
       - name: Se ejecuta análisis PMD
         run:  |
-          sfdx scanner:run --target .\Salesforce\main\default\classes\ -f table -e pmd --pmdconfig .\Ruleset-v1.xml
+          sfdx scanner:run --target .\Salesforce\main\default\classes\ -f table -e pmd --pmdconfig Ruleset-v1.xml
