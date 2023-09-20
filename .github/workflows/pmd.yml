@@ -9,18 +9,30 @@ on:
 jobs:
   Explore-GitHub-Actions:
     runs-on: ubuntu-latest
-    steps: 
+    steps:
+
+      - name: Run Chackout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
       - name: Instalar Herramientas (Salesforce CLI, Salesforce Code Analyzer, Vlocity Build)
         run: |
           npm install @salesforce/cli --global
           sfdx plugins:install @salesforce/sfdx-scanner
           npm install --global vlocity
 
-      - name: actions/checkout@v3
-        uses: actions/checkout@v3
-        with:
-          fetch-depth: 0
+      # - name: actions/checkout@v3
+      #   uses: actions/checkout@v3
+      #   with:
+      #     fetch-depth: 0
       
+      - uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin' # See 'Supported distributions' for available options
+          java-version: '17'
+      - run: ls
+
       - name: Se ejecuta análisis PMD
         run:  |
           sfdx scanner:run --target .\Salesforce\main\default\classes\ -f table -e pmd --pmdconfig Ruleset-v1.xml
