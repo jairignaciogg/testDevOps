@@ -18,14 +18,15 @@ jobs:
 
       - uses: actions/setup-node@v3
         with:
-          node-version: current
+          node-version: 18
           cache: 'npm'
+          cache-dependency-path: ./dependencies.json
       
       - name: Instalar Herramientas (Salesforce CLI, Salesforce Code Analyzer, Vlocity Build)
         run: |
-          npm install @salesforce/cli
+          npm install --global @salesforce/cli
           sfdx plugins:install @salesforce/sfdx-scanner
-          npm install vlocity
+          npm install --globally vlocity 
       
       # - uses: actions/setup-java@v3
       #   with:
