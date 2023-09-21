@@ -24,14 +24,14 @@ jobs:
       
       - name: Instalar Herramientas (Salesforce CLI, Salesforce Code Analyzer, Vlocity Build)
         run: |
-          npm install --global @salesforce/cli
+          npm install @salesforce/cli
           sfdx plugins:install @salesforce/sfdx-scanner
-          npm install --globally vlocity 
+          npm install vlocity 
       
-      - uses: actions/setup-java@v3
-        with:
-          distribution: 'temurin' # See 'Supported distributions' for available options
-          java-version: '17'
+      # - uses: actions/setup-java@v3
+      #   with:
+      #     distribution: 'temurin' # See 'Supported distributions' for available options
+      #     java-version: '17'
       
       - name: Se ejecuta análisis PMD
         run:  |
