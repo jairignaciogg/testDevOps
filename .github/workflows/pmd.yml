@@ -28,10 +28,10 @@ jobs:
           sfdx plugins:install @salesforce/sfdx-scanner
           npm install --globally vlocity 
       
-      # - uses: actions/setup-java@v3
-      #   with:
-      #     distribution: 'temurin' # See 'Supported distributions' for available options
-      #     java-version: '17'
+      - uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin' # See 'Supported distributions' for available options
+          java-version: '17'
       
       - name: Se ejecuta análisis PMD
         run:  |
@@ -46,4 +46,7 @@ jobs:
               lstFiles="${lstFiles},${file}"
             fi
           done
-          sfdx scanner:run --target $lstFiles -f table -e pmd --pmdconfig Ruleset-v1.xml
+          if [ -z "$lstFiles" ];
+            then
+            sfdx scanner:run --target $lstFiles -f table -e pmd --pmdconfig Ruleset-v1.xml
+          fi
