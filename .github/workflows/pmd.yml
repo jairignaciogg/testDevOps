@@ -27,27 +27,28 @@ jobs:
         run: |
           npm install -g @salesforce/cli 
           sfdx plugins:install @salesforce/sfdx-scanner
-          npm install -g vlocity 
+          npm install -g vlocity
+          sfdx scanner:run --target ./Salesforce/main/default/classes/ -f table -e pmd --pmdconfig Ruleset-v1.xml
       
       # - uses: actions/setup-java@v3
       #   with:
       #     distribution: 'temurin' # See 'Supported distributions' for available options
       #     java-version: '17'
       
-      - name: Se ejecuta análisis PMD
-        run:  |
-          mkdir -p ./tmp 
-          files=$(git diff --name-only --diff-filter=AMR main -- actions ./Salesforce/main/default/classes/*.cls)
-          lstFiles=""
-          for file in $files; do
-            if [ -z "$lstFiles" ];
-            then
-              lstFiles="${file}"
-            else
-              lstFiles="${lstFiles},${file}"
-            fi
-          done
-          if [ -z "$lstFiles" ];
-            then
-            sfdx scanner:run --target $lstFiles -f table -e pmd --pmdconfig Ruleset-v1.xml
-          fi
+      # - name: Se ejecuta análisis PMD
+      #   run:  |
+      #     mkdir -p ./tmp 
+      #     files=$(git diff --name-only --diff-filter=AMR main -- actions ./Salesforce/main/default/classes/*.cls)
+      #     lstFiles=""
+      #     for file in $files; do
+      #       if [ -z "$lstFiles" ];
+      #       then
+      #         lstFiles="${file}"
+      #       else
+      #         lstFiles="${lstFiles},${file}"
+      #       fi
+      #     done
+      #     if [ -z "$lstFiles" ];
+      #       then
+      #       sfdx scanner:run --target $lstFiles -f table -e pmd --pmdconfig Ruleset-v1.xml
+      #     fi
