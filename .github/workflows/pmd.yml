@@ -36,7 +36,7 @@ jobs:
       - name: Se ejecuta análisis PMD
         run:  |
           mkdir -p ./tmp 
-          files=$(git diff --name-only --diff-filter=AMR main actions ./Salesforce/main/default/classes/*.cls)
+          files=$(git diff --name-only --diff-filter=AMR main -- actions ./Salesforce/main/default/classes/*.cls)
           lstFiles=""
           for file in $files; do
             if [ -z "$lstFiles" ];
