@@ -16,27 +16,28 @@ jobs:
         with:
           fetch-depth: 0
 
-      - uses: actions/setup-node@v3
-        env:
-          cache-name: cache-sfdx-modules
+      - name: Cache sfdx
+        id: cache-sfdx
+        uses: actions/cache@v3
         with:
           path: ~/.npm
-          key: ${{ runner.os }}-build-${{ env.cache-name }}
+          key: ${{ runner.os }}-sfdx
       
       - name: Instalar Herramientas (Salesforce CLI, Salesforce Code Analyzer, Vlocity Build)
+        if: steps.cache-sfdx.outputs.cache-hit != 'true'
         run: |
           npm install -g @salesforce/cli 
           sfdx plugins:install @salesforce/sfdx-scanner
           npm install -g vlocity
-          sfdx scanner:run --target ./Salesforce/main/default/classes/ -f table -e pmd --pmdconfig Ruleset-v1.xml
       
       # - uses: actions/setup-java@v3
       #   with:
       #     distribution: 'temurin' # See 'Supported distributions' for available options
       #     java-version: '17'
       
-      # - name: Se ejecuta análisis PMD
-      #   run:  |
+      - name: Se ejecuta análisis PMD
+        run:  |
+          sfdx scanner:run --target ./Salesforce/main/default/classes/ -f table -e pmd --pmdconfig Ruleset-v1.xml
       #     mkdir -p ./tmp 
       #     files=$(git diff --name-only --diff-filter=AMR main -- actions ./Salesforce/main/default/classes/*.cls)
       #     lstFiles=""
