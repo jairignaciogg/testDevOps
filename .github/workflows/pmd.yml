@@ -25,9 +25,9 @@ jobs:
       
       - name: Instalar Herramientas (Salesforce CLI, Salesforce Code Analyzer, Vlocity Build)
         run: |
-          npm install @salesforce/cli
+          npm install -g @salesforce/cli 
           sfdx plugins:install @salesforce/sfdx-scanner
-          npm install vlocity 
+          npm install -g vlocity 
       
       # - uses: actions/setup-java@v3
       #   with:
