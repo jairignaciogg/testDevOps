@@ -3,7 +3,7 @@ run-name: Se ejecuta análisis PMD para ${{ github.actor }}
 on:
   push:
     branches:
-      - '*'
+      - 'main'
     # paths:
     #   - '**.cls'
 jobs:

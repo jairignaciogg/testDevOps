@@ -3,7 +3,8 @@
 # separate terms of service, privacy policy, and support
 # documentation.
 
-name: pmd
+name: PMD Salesforce Check
+run-name: Se ejecuta análisis PMD
 
 on:
   push:
@@ -43,3 +44,6 @@ jobs:
         uses: github/codeql-action/upload-sarif@v2
         with:
           sarif_file: pmd-report.sarif
+      - name: Se encontraron violaciones en análisis PMD
+        if: steps.pmd.outputs.violations != 0
+        run: exit 1
