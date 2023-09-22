@@ -22,8 +22,7 @@ jobs:
         with:
           path: |
             ~/.npm
-            /usr/local/lib/node_modules/@salesforce
-            /usr/local/lib/node_modules/sfdx-cli
+            /usr/local/lib/
           key: ${{ runner.os }}-sfdx
       
       - name: Instalar Herramientas (Salesforce CLI, Salesforce Code Analyzer, Vlocity Build)
