@@ -7,7 +7,7 @@ name: pmd
 
 on:
   push:
-    branches: [ "actions" ]
+    branches: [ "actions","main" ]
     paths:
       - '**.cls'
   pull_request:
