@@ -15,21 +15,12 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
-
-      - name: Cache sfdx
-        id: cache-sfdx
-        uses: actions/cache@v3
-        with:
-          path: |
-            ~/.npm
-            /usr/local/lib/
-          key: ${{ runner.os }}-sfdx
       
       - name: Instalar Herramientas (Salesforce CLI, Salesforce Code Analyzer, Vlocity Build)
         if: steps.cache-sfdx.outputs.cache-hit != 'true'
         run: |
           npm install -g @salesforce/cli 
-          # sfdx plugins:install @salesforce/sfdx-scanner
+          sfdx plugins:install @salesforce/sfdx-scanner
           # npm install -g vlocity
       
       # - uses: actions/setup-java@v3
@@ -39,9 +30,7 @@ jobs:
       
       - name: Se ejecuta análisis PMD
         run:  |
-          npm ls -g
-          sfdx --version
-          # sfdx scanner:run --target ./Salesforce/main/default/classes/ -f table -e pmd --pmdconfig Ruleset-v1.xml
+          sfdx scanner:run --target ./Salesforce/main/default/classes/ -f table -e pmd --pmdconfig Ruleset-v1.xml
       #     mkdir -p ./tmp 
       #     files=$(git diff --name-only --diff-filter=AMR main -- actions ./Salesforce/main/default/classes/*.cls)
       #     lstFiles=""
