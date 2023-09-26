@@ -7,10 +7,6 @@ name: PMD Salesforce Check
 run-name: Se ejecuta análisis PMD
 
 on:
-  push:
-    branches: [ "actions","main" ]
-    paths:
-      - '**.cls'
   pull_request:
     branches: [ "main" ]
     paths:
