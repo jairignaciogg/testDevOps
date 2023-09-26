@@ -8,7 +8,7 @@ run-name: Se ejecuta análisis PMD
 
 on:
   pull_request:
-    branches: [ "main" ]
+    branches: [ "main", "testMain"]
     paths:
       - '**.cls'
 
