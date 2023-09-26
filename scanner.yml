@@ -1,0 +1,48 @@
+name: PMD_Check
+run-name: Se ejecuta análisis PMD para ${{ github.actor }} 
+on:
+  push:
+    branches:
+      - 'main'
+    # paths:
+    #   - '**.cls'
+jobs:
+  PMD_Check:
+    runs-on: ubuntu-latest
+    steps:
+
+      - name: Run Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      
+      - name: Instalar Herramientas (Salesforce CLI, Salesforce Code Analyzer, Vlocity Build)
+        if: steps.cache-sfdx.outputs.cache-hit != 'true'
+        run: |
+          npm install -g @salesforce/cli 
+          sfdx plugins:install @salesforce/sfdx-scanner
+          # npm install -g vlocity
+      
+      # - uses: actions/setup-java@v3
+      #   with:
+      #     distribution: 'temurin' # See 'Supported distributions' for available options
+      #     java-version: '17'
+      
+      - name: Se ejecuta análisis PMD
+        run:  |
+          sfdx scanner:run --target ./Salesforce/main/default/classes/ -f table -e pmd --pmdconfig Ruleset-v1.xml
+      #     mkdir -p ./tmp 
+      #     files=$(git diff --name-only --diff-filter=AMR main -- actions ./Salesforce/main/default/classes/*.cls)
+      #     lstFiles=""
+      #     for file in $files; do
+      #       if [ -z "$lstFiles" ];
+      #       then
+      #         lstFiles="${file}"
+      #       else
+      #         lstFiles="${lstFiles},${file}"
+      #       fi
+      #     done
+      #     if [ -z "$lstFiles" ];
+      #       then
+      #       sfdx scanner:run --target $lstFiles -f table -e pmd --pmdconfig Ruleset-v1.xml
+      #     fi
