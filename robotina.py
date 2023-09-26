@@ -23,7 +23,9 @@ Lines = file1.readlines()
 
 def listToString(s, a=''):
     str1 = "/"
-    os.system("git checkout \"" + str1.join(s) + a + "\"")
+    strComm = "git checkout \"" + str1.join(s) + a + "\""
+    print("Print ====== "+ strComm)
+    os.system(strComm)
 
 
 for line in Lines:
