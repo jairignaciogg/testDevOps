@@ -17,17 +17,19 @@ permissions:
   permissions: write-all
 
 jobs:
-  deployment:
+  validate:
     runs-on: ubuntu-latest
-    environment: main
-      -run: |
-        echo ${{ github.ref_name }}
-        # echo ${{ env.ORG }}
+    environment: ${{ github.ref_name }}
+    steps:
+      - name: Show Org Url
+        run: |
+          echo ${{ github.ref_name }}
+          echo ${{ env.ORG }}
         
       - name: Install Tools (Salesforce CLI, Vlocity Build)
         run: |
-        npm install -g @salesforce/cli 
-        # npm install -g vlocity
+          npm install -g @salesforce/cli 
+          # npm install -g vlocity
       
       - name: Run Checkout
         uses: actions/checkout@v4
@@ -54,5 +56,3 @@ jobs:
           echo ${{ github.head_ref }} 
           echo ${{ github.ref_name }}
       #     python scr/robotinaV2.py ${{ github.head_ref }} ${{ github.ref_name }}
-
-      
