@@ -17,10 +17,10 @@ permissions:
   permissions: write-all
 
 jobs:
-  validate:
+  deployment:
     runs-on: ubuntu-latest
     environment: ${{ github.ref_name }}
-    steps:
+      steps:
       -run: |
         echo ${{ github.ref_name }}
         # echo ${{ env.ORG }}
