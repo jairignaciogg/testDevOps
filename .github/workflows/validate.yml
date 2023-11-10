@@ -24,7 +24,7 @@ jobs:
       - name: Show Org Url
         run: |
           echo ${{ github.base_ref }}
-          echo ${{ env.ORG }}
+          echo ${{ vars.ORG }}
         
       - name: Install Tools (Salesforce CLI, Vlocity Build)
         run: |
@@ -41,11 +41,11 @@ jobs:
         env:
           SF_URL: ${{ secrets.SF_URL }}
         run: |
-          echo $SF_URL > SFDX_URL
+          echo $SF_URL > sfdxurl.json
       
       - name: Authorize an org
         run: |
-          sf org login sfdx-url --sfdx-url-file SFDX_URL --set-default
+          sf org login sfdx-url --sfdx-url-file sfdxurl.json --set-default
 
       - name: Validate SFDX
         run: |
