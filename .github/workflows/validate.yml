@@ -1,0 +1,59 @@
+# This workflow uses actions that are not certified by GitHub.
+# They are provided by a third-party and are governed by
+# separate terms of service, privacy policy, and support
+# documentation.
+
+name: Salesforce Validate
+run-name: Se ejecuta validate a SF
+
+on:
+  pull_request:
+    types: [opened, synchronize]
+    branches: [ "*"]
+    # paths:
+    #   - 'Salesforce/**'
+
+permissions:
+  permissions: write-all
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    environment: ${{ github.ref_name }}
+    steps:
+      -run: |
+        echo ${{ github.ref_name }}
+        # echo ${{ env.ORG }}
+        
+      - name: Install Tools (Salesforce CLI, Vlocity Build)
+        run: |
+        npm install -g @salesforce/cli 
+        # npm install -g vlocity
+      
+      - name: Run Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      #Get the 
+      - name: Create auth file
+      env:
+        # SF_URL: ${{ secrets.SF_URL }}
+      run: |
+        echo $SF_URL > SFDX_URL
+      
+      - name: Authorize an org
+        run: |
+          sf org login sfdx-url --sfdx-url-file SFDX_URL --set-default
+
+      - name: Validate SFDX
+        run: |
+        sf project deploy validate -d Salesforce -l RunLocalTests
+      
+      - name: Run robotinaV2.py
+        run: |
+          echo ${{ github.head_ref }} 
+          echo ${{ github.ref_name }}
+      #     python scr/robotinaV2.py ${{ github.head_ref }} ${{ github.ref_name }}
+
+      
