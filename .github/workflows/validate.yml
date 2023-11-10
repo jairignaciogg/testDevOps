@@ -39,7 +39,7 @@ jobs:
       #Get the 
       - name: Create auth file
         env:
-          # SF_URL: ${{ secrets.SF_URL }}
+          SF_URL: ${{ secrets.SF_URL }}
         run: |
           echo $SF_URL > SFDX_URL
       
