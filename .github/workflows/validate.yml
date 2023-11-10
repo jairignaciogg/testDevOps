@@ -3,8 +3,8 @@
 # separate terms of service, privacy policy, and support
 # documentation.
 
-name: Salesforce Validate
-run-name: Se ejecuta validate a SF
+name: Salesforce Metadata Validate
+run-name: Salesforce Metadata Validate
 
 on:
   pull_request:
@@ -13,8 +13,8 @@ on:
     # paths:
     #   - 'Salesforce/**'
 
-permissions:
-  permissions: write-all
+# permissions:
+#   permissions: write-all
 
 jobs:
   validatesfdx:
