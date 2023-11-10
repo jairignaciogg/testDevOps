@@ -17,7 +17,7 @@ on:
 #   permissions: write-all
 
 jobs:
-  sfdx validate:
+  sfdx_validate:
     runs-on: ubuntu-latest
     environment: ${{ github.base_ref }}
     steps:
