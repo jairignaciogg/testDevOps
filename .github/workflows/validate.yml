@@ -19,7 +19,7 @@ permissions:
 jobs:
   deployment:
     runs-on: ubuntu-latest
-    environment: ${{ github.ref_name }}
+    environment: main
       -run: |
         echo ${{ github.ref_name }}
         # echo ${{ env.ORG }}
