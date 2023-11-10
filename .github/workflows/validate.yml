@@ -19,12 +19,12 @@ permissions:
 jobs:
   validate:
     runs-on: ubuntu-latest
-    environment: ${{ github.ref_name }}
+    # environment: ${{ github.ref_name }}
     steps:
       - name: Show Org Url
         run: |
           echo ${{ github.ref_name }}
-          echo ${{ env.ORG }}
+          # echo ${{ env.ORG }}
         
       - name: Install Tools (Salesforce CLI, Vlocity Build)
         run: |
