@@ -17,9 +17,9 @@ permissions:
   permissions: write-all
 
 jobs:
-  validate:
+  validatesfdx:
     runs-on: ubuntu-latest
-    # environment: ${{ github.ref_name }}
+    environment: ${{ github.ref_name }}
     steps:
       - name: Show Org Url
         run: |
@@ -38,10 +38,10 @@ jobs:
 
       #Get the 
       - name: Create auth file
-      env:
-        # SF_URL: ${{ secrets.SF_URL }}
-      run: |
-        echo $SF_URL > SFDX_URL
+        env:
+          # SF_URL: ${{ secrets.SF_URL }}
+        run: |
+          echo $SF_URL > SFDX_URL
       
       - name: Authorize an org
         run: |
@@ -49,7 +49,7 @@ jobs:
 
       - name: Validate SFDX
         run: |
-        sf project deploy validate -d Salesforce -l RunLocalTests
+          sf project deploy validate -d Salesforce -l RunLocalTests
       
       - name: Run robotinaV2.py
         run: |
