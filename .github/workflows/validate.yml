@@ -57,13 +57,12 @@ jobs:
         run: |
           # if test -d temp-Deploy/Salesforce/; then
           if test -d Salesforce/; then
-            sf project deploy validate -d Salesforce -l RunLocalTests > validate.md
+            sf project deploy validate -d Salesforce -l RunLocalTests > validate.txt
           fi
 
       - name: Comentar PR
         if: ${{ !cancelled() }}
-        uses: JoseThen/comment-pr@v1.2.0
+        uses: thollander/actions-comment-pull-request@v2
         with:
-          file_path: 'validate.md'
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          filePath: validate.txt
             
