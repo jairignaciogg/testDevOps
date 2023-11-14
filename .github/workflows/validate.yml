@@ -20,8 +20,6 @@ jobs:
   sfdx_validate:
     runs-on: ubuntu-latest
     environment: ${{ github.base_ref }}
-    env:
-      VALIDATE: 
     steps:
       - name: Show Org Url
         run: |
