@@ -64,6 +64,6 @@ jobs:
         if: ${{ !cancelled() }}
         uses: JoseThen/comment-pr@v1.2.0
         with:
-          file_path: './tmp/pr-comment.md'
+          file_path: 'validate.md'
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
             
