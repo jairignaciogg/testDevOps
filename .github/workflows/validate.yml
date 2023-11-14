@@ -58,10 +58,9 @@ jobs:
         run: |
           # if test -d temp-Deploy/Salesforce/; then
           if test -d Salesforce/; then
-            sf project deploy validate -d Salesforce -l RunLocalTests > $validate
-            echo "validate=$validate" >> $GITHUB_OUTPUT
+            sf project deploy validate -d Salesforce -l RunLocalTests > validate.txt
+            echo "validate=$(cat validate.txt)" >> $GITHUB_OUTPUT
           fi
-          echo $validate
 
       - name: Comentar PR
         if: ${{ !cancelled() }}
