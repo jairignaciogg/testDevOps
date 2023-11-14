@@ -54,11 +54,12 @@ jobs:
       - name: Run robotinaV2.py
         run: |
           python DevOps/Scripts/robotinaV2.py ${{ github.head_ref }} ${{ github.base_ref }}
-          tree -a ./temp-Deploy > files.txt
+          tree -a ./temp-Deploy -o files.txt
       
       - name: Comentar PR
         uses: thollander/actions-comment-pull-request@v2
         with:
+          comment_tag: Files
           filePath: files.txt
           GITHUB_TOKEN: ${{ github.token }}
 
@@ -73,5 +74,6 @@ jobs:
         if: ${{ !cancelled() }}
         uses: thollander/actions-comment-pull-request@v2
         with:
+          comment_tag: Validate
           filePath: validate.txt
           GITHUB_TOKEN: ${{ github.token }}
