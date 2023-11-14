@@ -27,6 +27,11 @@ jobs:
         run: |
           echo ${{ github.base_ref }}
           echo ${{ vars.ORG }}
+          if [ ! -n "${{ vars.ORG }}" ]
+          then
+            echo No se encuentra el ambiente
+            exit 1
+          fi
         
       - name: Install Tools (Salesforce CLI, Vlocity Build)
         run: |
