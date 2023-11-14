@@ -58,8 +58,7 @@ jobs:
         run: |
           # if test -d temp-Deploy/Salesforce/; then
           if test -d Salesforce/; then
-            sf project deploy validate -d Salesforce -l RunLocalTests > validate.txt
-            echo "validate=$(cat validate.txt)" >> $GITHUB_OUTPUT
+            echo "validate=$(sf project deploy validate -d Salesforce -l RunLocalTests)" >> $GITHUB_OUTPUT
           fi
 
       - name: Test
