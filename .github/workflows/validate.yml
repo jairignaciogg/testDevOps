@@ -65,4 +65,4 @@ jobs:
         uses: thollander/actions-comment-pull-request@v2
         with:
           filePath: validate.txt
-            
+          GITHUB_TOKEN: ${{ github.token }}
