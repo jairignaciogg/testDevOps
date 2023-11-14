@@ -1,4 +1,4 @@
-public with sharing class ClasePrueba1 {
+public with sharing class ClasePrueba2 {
     public static void metodo() {
         List<Account> lsAcc = new List<Account>();
         lsAcc = [SELECT Id FROM Account LIMIT 200];

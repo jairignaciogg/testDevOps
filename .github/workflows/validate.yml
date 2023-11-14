@@ -69,7 +69,9 @@ jobs:
         run: |
           # if test -d temp-Deploy/Salesforce/; then
           if test -d Salesforce/; then
-            sf project deploy validate -d Salesforce -l RunLocalTests --verbose > validate.txt
+            echo '```' >> validate.md
+            sf project deploy validate -d Salesforce -l RunLocalTests --verbose > validate.md
+            echo '```' >> validate.md
           fi
 
       - name: Comentar PR
@@ -77,5 +79,5 @@ jobs:
         uses: thollander/actions-comment-pull-request@v2
         with:
           comment_tag: Validate
-          filePath: validate.txt
+          filePath: validate.md
           GITHUB_TOKEN: ${{ github.token }}
