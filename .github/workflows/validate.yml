@@ -62,9 +62,15 @@ jobs:
             echo "validate=$(cat validate.txt)" >> $GITHUB_OUTPUT
           fi
 
+      - name: Test
+        run: |
+          echo TEST
+          echo ${{steps.validate.outputs.validate}}
+
       - name: Comentar PR
         if: ${{ !cancelled() }}
         uses: thollander/actions-comment-pull-request@v2
         with:
-          message: ${{steps.validate.outputs.validate}}
+          message: |
+            ${{steps.validate.outputs.validate}}
             
