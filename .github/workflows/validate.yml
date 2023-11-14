@@ -54,9 +54,9 @@ jobs:
       - name: Run robotinaV2.py
         run: |
           python DevOps/Scripts/robotinaV2.py ${{ github.head_ref }} ${{ github.base_ref }}
-          echo "```" >> files.txt
+          echo '```' >> files.txt
           tree -a ./temp-Deploy >> files.txt
-          echo "```" >> files.txt
+          echo '```' >> files.txt
       
       - name: Comentar PR
         uses: thollander/actions-comment-pull-request@v2
