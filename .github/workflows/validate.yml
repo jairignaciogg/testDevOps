@@ -53,7 +53,7 @@ jobs:
       # github.base_ref Rama Destino del PR
       - name: Run robotinaV2.py
         run: |
-          python scr/robotinaV2.py ${{ github.head_ref }} ${{ github.base_ref }}
+          python DevOps\Scripts\robotinaV2.py ${{ github.head_ref }} ${{ github.base_ref }}
           tree -a ./temp-Deploy > files.txt
       
       - name: Comentar PR
