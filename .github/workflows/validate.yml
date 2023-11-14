@@ -59,7 +59,7 @@ jobs:
         run: |
           # if test -d temp-Deploy/Salesforce/; then
           if test -d Salesforce/; then
-            sf project deploy validate -d Salesforce -l RunLocalTests > validate.txt
+            sf project deploy validate -d Salesforce -l RunLocalTests --verbose > validate.txt
           fi
 
       - name: Comentar PR
