@@ -1,0 +1,82 @@
+# This workflow uses actions that are not certified by GitHub.
+# They are provided by a third-party and are governed by
+# separate terms of service, privacy policy, and support
+# documentation.
+
+name: Salesforce Metadata Validate
+run-name: Salesforce Metadata Validate
+
+on:
+  pull_request:
+    types: [opened, synchronize]
+    branches: [ "*"]
+    # paths:
+    #   - 'Salesforce/**'
+
+# permissions:
+#   permissions: write-all
+permissions: 
+  pull-requests: write 
+
+jobs:
+  sfdx_validate:
+    runs-on: ubuntu-latest
+    environment: ${{ github.base_ref }}
+    steps:
+      - name: Show Org Url
+        run: |
+          echo ${{ github.base_ref }}
+          echo ${{ vars.ORG }}
+        
+      - name: Install Tools (Salesforce CLI, Vlocity Build)
+        run: |
+          npm install -g @salesforce/cli 
+          # npm install -g vlocity
+      
+      - name: Run Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      #Get the 
+      - name: Create auth file
+        env:
+          SF_URL: ${{ secrets.SF_URL }}
+        run: |
+          echo $SF_URL > sfdxurl.json
+      
+      - name: Authorize an org
+        run: |
+          sf org login sfdx-url --sfdx-url-file sfdxurl.json --set-default
+      
+      # github.head_ref Rama Origen del PR
+      # github.base_ref Rama Destino del PR
+      - name: Run robotinaV2.py
+        run: |
+          python DevOps/Scripts/robotinaV2.py ${{ github.head_ref }} ${{ github.base_ref }}
+          echo '```' >> files.txt
+          tree -a ./temp-Deploy >> files.txt
+          echo '```' >> files.txt
+      
+      - name: Comentar PR
+        uses: thollander/actions-comment-pull-request@v2
+        with:
+          comment_tag: Files
+          filePath: files.txt
+          GITHUB_TOKEN: ${{ github.token }}
+
+      - name: Validate SFDX
+        run: |
+          # if test -d temp-Deploy/Salesforce/; then
+          if test -d Salesforce/; then
+            echo '```' >> validate.md
+            sf project deploy validate -d Salesforce -l RunLocalTests --verbose >> validate.md
+            echo '```' >> validate.md
+          fi
+
+      - name: Comentar PR
+        if: ${{ !cancelled() }}
+        uses: thollander/actions-comment-pull-request@v2
+        with:
+          filePath: validate.md
+          GITHUB_TOKEN: ${{ github.token }}
