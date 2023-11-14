@@ -54,16 +54,18 @@ jobs:
       #     python scr/robotinaV2.py ${{ github.head_ref }} ${{ github.base_ref }}
 
       - name: Validate SFDX
+        id: validate
         run: |
           # if test -d temp-Deploy/Salesforce/; then
           if test -d Salesforce/; then
-            sf project deploy validate -d Salesforce -l RunLocalTests > $env.VALIDATE
+            sf project deploy validate -d Salesforce -l RunLocalTests > $validate
+            echo "validate=$validate" >> $GITHUB_OUTPUT
           fi
-          echo ${{ env.VALIDATE }}
+          echo $validate
 
       - name: Comentar PR
         if: ${{ !cancelled() }}
         uses: thollander/actions-comment-pull-request@v2
         with:
-          message: ${{ env.VALIDATE }}
+          message: ${{steps.validate.outputs.validate}}
             
