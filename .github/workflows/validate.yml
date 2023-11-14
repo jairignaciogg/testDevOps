@@ -61,6 +61,7 @@ jobs:
           if test -d Salesforce/; then
             sf project deploy validate -d Salesforce -l RunLocalTests > $env.VALIDATE
           fi
+          echo ${{ env.VALIDATE }}
 
       - name: Comentar PR
         if: ${{ !cancelled() }}
