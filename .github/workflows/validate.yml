@@ -78,6 +78,5 @@ jobs:
         if: ${{ !cancelled() }}
         uses: thollander/actions-comment-pull-request@v2
         with:
-          comment_tag: Validate
           filePath: validate.md
           GITHUB_TOKEN: ${{ github.token }}
