@@ -54,24 +54,16 @@ jobs:
       #     python scr/robotinaV2.py ${{ github.head_ref }} ${{ github.base_ref }}
 
       - name: Validate SFDX
-        id: validate
         run: |
           # if test -d temp-Deploy/Salesforce/; then
           if test -d Salesforce/; then
-            sf project deploy validate -d Salesforce -l RunLocalTests > validate.txt
-            echo "validate=$(cat validate.txt)" >> $GITHUB_OUTPUT
+            sf project deploy validate -d Salesforce -l RunLocalTests > validate.md
           fi
-
-      - name: Test
-        if: ${{ !cancelled() }}
-        run: |
-          echo TEST
-          echo ${{steps.validate.outputs.validate}}
 
       - name: Comentar PR
         if: ${{ !cancelled() }}
-        uses: thollander/actions-comment-pull-request@v2
+        uses: JoseThen/comment-pr@v1.2.0
         with:
-          message: |
-            ${{steps.validate.outputs.validate}}
+          file_path: './tmp/pr-comment.md'
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
             
