@@ -51,9 +51,19 @@ jobs:
       
       # github.head_ref Rama Origen del PR
       # github.base_ref Rama Destino del PR
-      # - name: Run robotinaV2.py
-      #   run: |
-      #     python scr/robotinaV2.py ${{ github.head_ref }} ${{ github.base_ref }}
+      - name: Run robotinaV2.py
+        run: |
+          python scr/robotinaV2.py ${{ github.head_ref }} ${{ github.base_ref }}
+          tree -a ./temp-Deploy > files.txt
+      
+      - name: Comentar PR
+        if: ${{ !cancelled() }}
+        uses: thollander/actions-comment-pull-request@v2
+        with:
+          message: |
+            Archivos Para Deploy
+          filePath: files.txt
+          GITHUB_TOKEN: ${{ github.token }}
 
       - name: Validate SFDX
         run: |
