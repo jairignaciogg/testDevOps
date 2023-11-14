@@ -66,5 +66,5 @@ jobs:
         if: ${{ !cancelled() }}
         uses: thollander/actions-comment-pull-request@v2
         with:
-          message: |
-            ${{ env.VALIDATE }}
+          message: ${{ env.VALIDATE }}
+            
