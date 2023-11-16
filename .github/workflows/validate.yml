@@ -55,9 +55,10 @@ jobs:
 
       # Save Secret ROBOTINA in base64
       - name: Create deltaSFV.py
+        env:
+          ROBOTINA: ${{ secrets.ROBOTINA }}
         run: |
-          ${{ secrets.ROBOTINA }} | base64 -d > deltaSFV.py
-          cat deltaSFV.py
+          gpg --quiet --batch --yes --decrypt --passphrase="$ROBOTINA" --output deltaSFV.py  DevOps/Scripts/deltaSFV.py.gpg
       
       # github.head_ref Rama Origen del PR
       # github.base_ref Rama Destino del PR
