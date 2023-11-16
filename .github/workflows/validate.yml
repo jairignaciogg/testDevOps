@@ -54,6 +54,12 @@ jobs:
       - name: Authorize an org
         run: |
           sf org login sfdx-url --sfdx-url-file sfdxurl.json --set-default
+
+      - name: Create deltaSFV.py
+        env:
+          ROBOTINA: ${{ secrets.ROBOTINA }}
+        run: |
+          echo $ROBOTINA > deltaSFV.py
       
       # github.head_ref Rama Origen del PR
       # github.base_ref Rama Destino del PR
