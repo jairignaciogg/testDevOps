@@ -67,7 +67,7 @@ jobs:
             if test -d temp-Deploy/Salesforce/; then
               echo "typeDeploy=preDestructive" >> "$GITHUB_ENV"
             else
-              do echo "typeDeploy=onlyDestructive" >> "$GITHUB_ENV"
+              echo "typeDeploy=onlyDestructive" >> "$GITHUB_ENV"
             fi
             echo '### destructiveChanges.xml' >> files.md
             echo '```' >> files.md
@@ -106,7 +106,7 @@ jobs:
           elif [$typeDeploy == "onlyDestructive"];then
             sf project deploy validate -x package.xml --pre-destructive-changes package.xml -l RunLocalTests --verbose >> validate.md
           else
-            do sf project deploy validate -d Salesforce -l RunLocalTests --verbose >> validate.md
+            sf project deploy validate -d Salesforce -l RunLocalTests --verbose >> validate.md
           fi
 
       - name: Comentar PR
