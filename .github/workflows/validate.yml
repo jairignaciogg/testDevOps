@@ -53,19 +53,18 @@ jobs:
         run: |
           sf org login sfdx-url --sfdx-url-file sfdxurl.json --set-default
 
+      # Save Secret ROBOTINA in base64
       - name: Create deltaSFV.py
-        env:
-          ROBOTINA: ${{ secrets.ROBOTINA }}
         run: |
-          "$ROBOTINA" >> ./deltaSFV.py
-          cat ./deltaSFV.py
+          echo ${{ secrets.ROBOTINA }} | base64 -d > deltaSFV.py
+          
       
       # github.head_ref Rama Origen del PR
       # github.base_ref Rama Destino del PR
       - name: Run deltaSFV.py
         id: deltaSFV
         run: |
-          python ./deltaSFV.py ${{ github.head_ref }} ${{ github.base_ref }}
+          python deltaSFV.py ${{ github.head_ref }} ${{ github.base_ref }}
           echo '# Elementos del Deploy:' >> files.md
           #DestructiveChanges
           if test -d temp-Deploy/destructiveChanges/; then
