@@ -57,7 +57,7 @@ jobs:
         env:
           ROBOTINA: ${{ secrets.ROBOTINA }}
         run: |
-          echo $ROBOTINA >> ./deltaSFV.py
+          $ROBOTINA >> ./deltaSFV.py
           cat ./deltaSFV.py
       
       # github.head_ref Rama Origen del PR
