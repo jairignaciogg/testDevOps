@@ -10,8 +10,6 @@ on:
   pull_request:
     types: [opened, synchronize]
     branches: [ "*"]
-    paths:
-      - 'Salesforce/**'
 
 # permissions:
 #   permissions: write-all
@@ -66,7 +64,7 @@ jobs:
       - name: Run deltaSFV.py
         id: deltaSFV
         run: |
-          python DevOps/Scripts/deltaSFV.py ${{ github.head_ref }} ${{ github.base_ref }}
+          python deltaSFV.py ${{ github.head_ref }} ${{ github.base_ref }}
           echo '# Elementos del Deploy:' >> files.md
           #DestructiveChanges
           if test -d temp-Deploy/destructiveChanges/; then
