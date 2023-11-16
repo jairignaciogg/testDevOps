@@ -53,7 +53,7 @@ def createTempFiles(file, carpeta):
             s[1]=="Product2" or s[1]=="RelationshipGraph" or s[1]=="VlocityCard" or s[1]=="VlocityUILayout" or s[1]=="VlocityUITemplate" or s[1]=="SObject_VlocityErrorLogEntry" or 
             s[1]=="VlocityAction" or s[1]=="DocumentTemplate" or s[1]=="ContentVersion" or s[1]=="Rule" or s[1]=="EntityFilter" or s[1]=="InterfaceImplementation" or
             s[1]=="ContextDimension" or s[1]=="ContextScope" or s[1]=="UISection" or s[1]=="UIFacet" or s[1]=="System" or s[1]=="PricingPlan"or s[1]=="IntegrationRetryPolicy" or
-            s[1]=="SObject_ContentVersion" or s[1]=="VlocityFunction" or s[1]=="FlexCard" or s[1]=="SObject_System" or s[1]=="Document"):
+            s[1]=="SObject_ContentVersion" or s[1]=="VlocityFunction" or s[1]=="FlexCard" or s[1]=="SObject_System" or s[1]=="Document" or s[1]=="CpqConfigurationSetup"):
                 diffCheck['vlocity'] = True
                 lstComms.add(copyTempFiles(carpeta, s, '/*'))
     for comm in lstComms:
@@ -81,7 +81,7 @@ if __name__ == "__main__":
     os.system("git clean -df")
     os.system("git reset --hard")
     os.system("mkdir " + carpeta)
-    diff('',origen, destino, 'AMR', 'temp-diff.txt')
+    diff('./',origen, destino, 'AMR', 'temp-diff.txt')
     diffcheck = createTempFiles('temp-diff.txt', carpeta)
     if diffcheck['sf']:
         createXML("temp-Deploy/Salesforce",'package',"temp-Deploy")
