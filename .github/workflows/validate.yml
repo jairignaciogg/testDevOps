@@ -36,7 +36,7 @@ jobs:
       - name: Install Tools (Salesforce CLI, Vlocity Build)
         run: |
           npm install -g @salesforce/cli
-          sf plugins:install sfdx-git-delta
+          echo y | sf plugins:install sfdx-git-delta
           # npm install --global vlocity
       
       - name: Run Checkout
