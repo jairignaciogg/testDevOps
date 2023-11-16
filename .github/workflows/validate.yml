@@ -10,8 +10,6 @@ on:
   pull_request:
     types: [opened, synchronize]
     branches: [ "*"]
-    paths:
-      - 'Salesforce/**'
 
 # permissions:
 #   permissions: write-all
