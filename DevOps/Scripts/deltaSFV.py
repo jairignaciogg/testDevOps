@@ -1,7 +1,7 @@
 import os
 import sys
 
-def diff(origen, destino, filter, file):
+def diff(path, origen, destino, filter, file):
     os.system("git fetch")
     os.system("git checkout "+destino)
     os.system("git pull ")
@@ -11,8 +11,8 @@ def diff(origen, destino, filter, file):
     os.system("git config --global i18n.logoutputencoding utf8")
     os.system("git config --global i18n.commitencoding utf8")
     os.system("git config --global --unset svn.pathnameencoding")
-    os.system("git diff --name-only --diff-filter=" + filter + " remotes/origin/" + 
-                destino + "...remotes/origin/" + origen + " | sort > " + file)
+    return os.system("git diff --name-only --diff-filter=" + filter + " remotes/origin/" + 
+                destino + "...remotes/origin/" + origen + " " + path + " | sort > " + file)
 
 def copyTempFiles(carpeta, s, a=''):
     if type(s) is list:
@@ -23,9 +23,9 @@ def copyTempFiles(carpeta, s, a=''):
     return comm
 
 def createTempFiles(file, carpeta):
-    diffCheck = {'package': False, 'vlocity': False}
+    diffCheck = {'sf': False, 'vlocity': False}
     lstComms = set()
-    fileOpen = open(file, 'r')
+    fileOpen = open(file, 'r', encoding='utf8')
     lines = fileOpen.readlines()
     for line in lines:
         componente = line.replace(chr(0), "")
@@ -33,7 +33,7 @@ def createTempFiles(file, carpeta):
         if len(s) > 1:
             s.pop()
         if s[0] == "Salesforce":
-            diffCheck['package'] = True
+            diffCheck['sf'] = True
             if s[3] == "lwc" or s[3] == "aura":
             # Carpeta por metadato
                 lstComms.add(copyTempFiles(carpeta, s[0:5], '/*'))
@@ -62,17 +62,29 @@ def createTempFiles(file, carpeta):
     return diffCheck
             
 
-def createXML(path,types):
-    os.system("sf project generate manifest --source-dir " + path + " --type " + types)
+def createXML(path,types,pathSalida):
+    os.system("sf project generate manifest --source-dir " + path + " --type " + types + " --output-dir " + pathSalida)
+
+def createDestructive(origen,destino,path):
+    os.system("sf sgd:source:delta --to " + origen + " --from " + destino + " --output " + path)
+
+def contar_lineas(archivo):
+    with open(archivo, 'r') as file:
+        lineas = file.readlines()
+        return len(lineas)
 
 if __name__ == "__main__":
     origen = sys.argv[1]
     destino = sys.argv[2]
 
     carpeta = 'temp-Deploy'
-    os.system("rm -r " + carpeta)
+    os.system("git clean -df")
+    os.system("git reset --hard")
     os.system("mkdir " + carpeta)
-    diff(origen, destino, 'AMR', 'temp-diff.txt')
+    diff('',origen, destino, 'AMR', 'temp-diff.txt')
     diffcheck = createTempFiles('temp-diff.txt', carpeta)
-    if diffcheck['package']:
-        createXML("temp-Deploy/Salesforce",'package')
+    if diffcheck['sf']:
+        createXML("temp-Deploy/Salesforce",'package',"temp-Deploy")
+    diff('Salesforce/',origen, destino, 'D', 'temp-delete.txt')
+    if contar_lineas('temp-delete.txt') > 0:
+        createDestructive(origen,destino,carpeta)

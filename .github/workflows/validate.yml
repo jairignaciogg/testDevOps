@@ -10,8 +10,8 @@ on:
   pull_request:
     types: [opened, synchronize]
     branches: [ "*"]
-    # paths:
-    #   - 'Salesforce/**'
+    paths:
+      - 'Salesforce/**'
 
 # permissions:
 #   permissions: write-all
@@ -27,11 +27,17 @@ jobs:
         run: |
           echo ${{ github.base_ref }}
           echo ${{ vars.ORG }}
+          if [ ! -n "${{ vars.ORG }}" ]
+          then
+            echo No se encuentra el ambiente
+            exit 1
+          fi
         
       - name: Install Tools (Salesforce CLI, Vlocity Build)
         run: |
-          npm install -g @salesforce/cli 
-          # npm install -g vlocity
+          npm install -g @salesforce/cli
+          sf plugins:install sfdx-git-delta
+          # npm install --global vlocity
       
       - name: Run Checkout
         uses: actions/checkout@v4
@@ -51,31 +57,60 @@ jobs:
       
       # github.head_ref Rama Origen del PR
       # github.base_ref Rama Destino del PR
-      - name: Run robotinaV2.py
+      - name: Run deltaSFV.py
+        id: deltaSFV
         run: |
-          python DevOps/Scripts/robotinaV2.py ${{ github.head_ref }} ${{ github.base_ref }}
-          echo '```' >> files.txt
-          tree -a ./temp-Deploy >> files.txt
-          echo '```' >> files.txt
+          python DevOps/Scripts/deltaSFV.py ${{ github.head_ref }} ${{ github.base_ref }}
+          echo '# Elementos del Deploy:' >> files.md
+          #DestructiveChanges
+          if test -d temp-Deploy/destructiveChanges/; then
+            if test -d temp-Deploy/Salesforce/; then
+              echo "typeDeploy=preDestructive" >> "$GITHUB_ENV"
+            else
+              echo "typeDeploy=onlyDestructive" >> "$GITHUB_ENV"
+            fi
+            echo '### destructiveChanges.xml' >> files.md
+            echo '```' >> files.md
+            cat temp-Deploy/destructiveChanges/destructiveChanges.xml >> files.md
+            echo '```' >> files.md
+          fi
+          #SOURCE-DIR
+          if test -d temp-Deploy/Salesforce/; then
+            echo '### package.xml' >> files.md
+            echo '```' >> files.md
+            cat temp-Deploy/package.xml >> files.md
+            echo '```' >> files.md
+            echo "typeDeploy=sourceDir" >> "$GITHUB_ENV"
+          fi
+          #Vlocity
+          if test -d temp-Deploy/Vlocity/; then
+            echo '### Vlocity' >> files.md
+            echo '```' >> files.md
+            tree -a ./temp-Deploy/Vlocity/ >> files.md
+            echo '```' >> files.md
+          fi
       
       - name: Comentar PR
         uses: thollander/actions-comment-pull-request@v2
         with:
           comment_tag: Files
-          filePath: files.txt
+          filePath: files.md
           GITHUB_TOKEN: ${{ github.token }}
 
       - name: Validate SFDX
+        id: validate
         run: |
-          # if test -d temp-Deploy/Salesforce/; then
-          if test -d Salesforce/; then
-            echo '```' >> validate.md
+          echo "$typeDeploy"
+          if [$typeDeploy == "preDestructive"];then
+            sf project deploy validate -x temp-Deploy/destructiveChanges/package.xml --pre-destructive-changes temp-Deploy/destructiveChanges/destructiveChanges.xml -l RunLocalTests --verbose >> validate.md
+          elif [$typeDeploy == "onlyDestructive"];then
+            sf project deploy validate -x package.xml --pre-destructive-changes package.xml -l RunLocalTests --verbose >> validate.md
+          else
             sf project deploy validate -d Salesforce -l RunLocalTests --verbose >> validate.md
-            echo '```' >> validate.md
           fi
 
       - name: Comentar PR
-        if: ${{ !cancelled() }}
+        if: ${{ !cancelled() && steps.validate.conclusion != 'skipped' }}
         uses: thollander/actions-comment-pull-request@v2
         with:
           filePath: validate.md
