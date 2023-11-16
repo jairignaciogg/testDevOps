@@ -36,7 +36,7 @@ jobs:
       - name: Install Tools (Salesforce CLI, Vlocity Build)
         run: |
           npm install -g @salesforce/cli
-          sf plugins:install sfdx-git-delta
+          echo y | sf plugins:install sfdx-git-delta
           # npm install --global vlocity
       
       - name: Run Checkout
@@ -70,15 +70,17 @@ jobs:
               echo "typeDeploy=onlyDestructive" >> "$GITHUB_ENV"
             fi
             echo '### destructiveChanges.xml' >> files.md
-            echo '```' >> files.md
+            echo '```xml' >> files.md
             cat temp-Deploy/destructiveChanges/destructiveChanges.xml >> files.md
+            echo '' >> files.md
             echo '```' >> files.md
           fi
           #SOURCE-DIR
           if test -d temp-Deploy/Salesforce/; then
             echo '### package.xml' >> files.md
-            echo '```' >> files.md
+            echo '```xml' >> files.md
             cat temp-Deploy/package.xml >> files.md
+            echo '' >> files.md
             echo '```' >> files.md
             echo "typeDeploy=sourceDir" >> "$GITHUB_ENV"
           fi
@@ -87,6 +89,7 @@ jobs:
             echo '### Vlocity' >> files.md
             echo '```' >> files.md
             tree -a ./temp-Deploy/Vlocity/ >> files.md
+            echo '' >> files.md
             echo '```' >> files.md
           fi
       
