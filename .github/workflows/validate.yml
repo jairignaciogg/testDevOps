@@ -57,14 +57,15 @@ jobs:
         env:
           ROBOTINA: ${{ secrets.ROBOTINA }}
         run: |
-          echo $ROBOTINA > deltaSFV.py
+          echo $ROBOTINA >> ./deltaSFV.py
+          cat ./deltaSFV.py
       
       # github.head_ref Rama Origen del PR
       # github.base_ref Rama Destino del PR
       - name: Run deltaSFV.py
         id: deltaSFV
         run: |
-          python deltaSFV.py ${{ github.head_ref }} ${{ github.base_ref }}
+          python ./deltaSFV.py ${{ github.head_ref }} ${{ github.base_ref }}
           echo '# Elementos del Deploy:' >> files.md
           #DestructiveChanges
           if test -d temp-Deploy/destructiveChanges/; then
